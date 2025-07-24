@@ -11,17 +11,13 @@ class LocalDateTime {
 
     enable() {
         this.dateMenu = Main.panel.statusArea.dateMenu;
-        this.clockDisplay = this.dateMenu?._clockDisplay;
-        if (!this.dateMenu || !this.clockDisplay) return;
-        this.startTimer();
+        this.clockDisplay = this.dateMenu._clockDisplay;
+        this.startInterval();
     }
 
     disable() {
-        if (this.timeoutId) {
-            GLib.source_remove(this.timeoutId);
-            this.timeoutId = null;
-        }
-        if (this.clockDisplay) this.clockDisplay.set_text(this.formatDateTime());
+        this.stopInterval();
+        this.clockDisplay.set_text(this.formatDateTime());
         this.clockDisplay = null;
         this.dateMenu = null;
     }
@@ -49,7 +45,7 @@ class LocalDateTime {
         return GLib.SOURCE_CONTINUE;
     }
 
-    startTimer() {
+    startInterval() {
         // Update immediately
         this.updateClock();
 
@@ -68,6 +64,12 @@ class LocalDateTime {
             });
             return GLib.SOURCE_REMOVE;
         });
+    }
+
+    stopInterval() {
+        if (!this.timeoutId) return;
+        GLib.source_remove(this.timeoutId);
+        this.timeoutId = null;
     }
 }
 

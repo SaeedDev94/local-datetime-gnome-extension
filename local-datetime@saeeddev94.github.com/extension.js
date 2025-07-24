@@ -4,14 +4,12 @@ const Main = imports.ui.main;
 class LocalDateTime {
 
     constructor() {
-        this.dateMenu = null;
         this.clockDisplay = null;
         this.timeoutId = null;
     }
 
     enable() {
-        this.dateMenu = Main.panel.statusArea.dateMenu;
-        this.clockDisplay = this.dateMenu._clockDisplay;
+        this.clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
         this.startInterval();
     }
 
@@ -19,7 +17,6 @@ class LocalDateTime {
         this.stopInterval();
         this.clockDisplay.set_text(this.formatDateTime());
         this.clockDisplay = null;
-        this.dateMenu = null;
     }
 
     systemTimeZone() {

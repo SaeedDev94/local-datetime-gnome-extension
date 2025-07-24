@@ -35,11 +35,7 @@ class LocalDateTime {
     }
 
     updateClock() {
-        if (!this.clockDisplay) {
-            return GLib.SOURCE_REMOVE;
-        }
         this.clockDisplay.set_text(this.formatDateTime('Asia/Tehran'));
-        return GLib.SOURCE_CONTINUE;
     }
 
     startInterval() {

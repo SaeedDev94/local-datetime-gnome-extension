@@ -15,12 +15,7 @@ class LocalDateTime {
 
     disable() {
         this.stopInterval();
-        this.clockDisplay.set_text(this.formatDateTime());
         this.clockDisplay = null;
-    }
-
-    systemTimeZone() {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
 
     formatDateTime(timeZone) {
@@ -30,12 +25,16 @@ class LocalDateTime {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true,
-            timeZone: timeZone ?? this.systemTimeZone()
+            timeZone,
         }).replaceAll(',', ' ');
     }
 
-    updateClock() {
-        this.clockDisplay.set_text(this.formatDateTime('Asia/Tehran'));
+    systemTimeZone() {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+
+    updateClock(timeZone = 'Asia/Tehran') {
+        this.clockDisplay.set_text(this.formatDateTime(timeZone));
     }
 
     startInterval() {
@@ -60,9 +59,9 @@ class LocalDateTime {
     }
 
     stopInterval() {
-        if (!this.timeoutId) return;
         GLib.source_remove(this.timeoutId);
         this.timeoutId = null;
+        this.updateClock(this.systemTimeZone());
     }
 }
 

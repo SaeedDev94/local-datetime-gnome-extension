@@ -29,12 +29,18 @@ class LocalDateTime {
         }).replaceAll(',', ' ');
     }
 
+    targetTimeZone() {
+        return 'Asia/Tehran';
+    }
+
     systemTimeZone() {
         return Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
 
-    updateClock(timeZone = 'Asia/Tehran') {
-        this.clockDisplay.set_text(this.formatDateTime(timeZone));
+    updateClock(timeZone) {
+        this.clockDisplay.set_text(
+            this.formatDateTime(timeZone ?? this.targetTimeZone())
+        );
     }
 
     startInterval() {

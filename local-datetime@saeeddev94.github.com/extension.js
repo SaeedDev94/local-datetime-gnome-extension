@@ -5,8 +5,8 @@ import GLib from 'gi://GLib';
 export default class LocalDateTime extends Extension {
 
     enable() {
-        this.clock = Main.panel.statusArea.quickSettings._date._clock;
-        this.clockDisplay = Main.panel.statusArea.quickSettings._date._clockDisplay;
+        this.clock = Main.panel.statusArea.dateMenu._clock;
+        this.clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
         this.signalId = this.clock.connect('notify::clock', () => this.updateClock());
         GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
             this.updateClock();

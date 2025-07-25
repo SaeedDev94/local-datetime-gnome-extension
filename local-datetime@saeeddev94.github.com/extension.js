@@ -1,21 +1,26 @@
-const { GLib } = imports.gi;
 const Main = imports.ui.main;
 
 class LocalDateTime {
 
     constructor() {
+        this.clock = null;
         this.clockDisplay = null;
-        this.timeoutId = null;
+        this.signalId = null;
     }
 
     enable() {
+        this.clock = Main.panel.statusArea.dateMenu._clock;
         this.clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
-        this.startInterval();
+        this.signalId = this.clock.connect('notify::clock', () => this.updateClock());
+        this.updateClock();
     }
 
     disable() {
-        this.stopInterval();
+        this.clock.disconnect(this.signalId);
+        this.updateClock(this.systemTimeZone());
+        this.signalId = null;
         this.clockDisplay = null;
+        this.clock = null;
     }
 
     formatDateTime(timeZone) {
@@ -41,20 +46,6 @@ class LocalDateTime {
         this.clockDisplay.set_text(
             this.formatDateTime(timeZone ?? this.targetTimeZone())
         );
-    }
-
-    startInterval() {
-        this.updateClock();
-        this.timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
-            this.updateClock();
-            return GLib.SOURCE_CONTINUE;
-        });
-    }
-
-    stopInterval() {
-        GLib.source_remove(this.timeoutId);
-        this.timeoutId = null;
-        this.updateClock(this.systemTimeZone());
     }
 }
 

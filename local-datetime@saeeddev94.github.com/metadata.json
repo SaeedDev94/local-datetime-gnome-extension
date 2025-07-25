@@ -2,6 +2,6 @@
   "uuid": "local-datetime@saeeddev94.github.com",
   "name": "Local DateTime",
   "description": "Customize Display DateTime",
-  "shell-version": ["43"],
+  "shell-version": ["48"],
   "version": 6
 }

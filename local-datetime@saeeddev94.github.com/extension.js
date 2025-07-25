@@ -1,17 +1,12 @@
-const { GLib } = imports.gi;
-const Main = imports.ui.main;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import GLib from 'gi://GLib';
 
-class LocalDateTime {
-
-    constructor() {
-        this.clock = null;
-        this.clockDisplay = null;
-        this.signalId = null;
-    }
+export default class LocalDateTime extends Extension {
 
     enable() {
-        this.clock = Main.panel.statusArea.dateMenu._clock;
-        this.clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
+        this.clock = Main.panel.statusArea.quickSettings._date._clock;
+        this.clockDisplay = Main.panel.statusArea.quickSettings._date._clockDisplay;
         this.signalId = this.clock.connect('notify::clock', () => this.updateClock());
         GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
             this.updateClock();
@@ -51,8 +46,4 @@ class LocalDateTime {
             this.formatDateTime(timeZone ?? this.targetTimeZone())
         );
     }
-}
-
-function init() {
-    return new LocalDateTime();
 }

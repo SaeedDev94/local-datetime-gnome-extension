@@ -44,23 +44,10 @@ class LocalDateTime {
     }
 
     startInterval() {
-        // Update immediately
         this.updateClock();
-
-        // Set up a timer to update every minute
-        // Calculate milliseconds until the next minute
-        const now = new Date();
-        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-
-        // First timeout to sync to the minute
-        this.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, msUntilNextMinute, () => {
+        this.timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
             this.updateClock();
-            // Now set up regular 60-second intervals
-            this.timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 60, () => {
-                this.updateClock();
-                return GLib.SOURCE_CONTINUE;
-            });
-            return GLib.SOURCE_REMOVE;
+            return GLib.SOURCE_CONTINUE;
         });
     }
 

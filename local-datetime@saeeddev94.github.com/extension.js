@@ -1,3 +1,4 @@
+const { GLib } = imports.gi;
 const Main = imports.ui.main;
 
 class LocalDateTime {
@@ -12,7 +13,10 @@ class LocalDateTime {
         this.clock = Main.panel.statusArea.dateMenu._clock;
         this.clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
         this.signalId = this.clock.connect('notify::clock', () => this.updateClock());
-        this.updateClock();
+        GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+            this.updateClock();
+            return GLib.SOURCE_REMOVE;
+        });
     }
 
     disable() {
